@@ -1,3 +1,4 @@
+using DevFreela.API.Filters;
 using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Application.Validators;
 using DevFreela.Core.Repositories;
@@ -33,6 +34,8 @@ namespace DevFreela.API
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
 
             services.AddFluentValidationAutoValidation();
             services.AddFluentValidationClientsideAdapters();

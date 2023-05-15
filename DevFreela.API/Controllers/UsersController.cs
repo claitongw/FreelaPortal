@@ -1,15 +1,8 @@
 ﻿using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateUser;
-using DevFreela.Application.InputModels;
 using DevFreela.Application.Queries.GetUser;
-using DevFreela.Application.Services.Interfaces;
-using DevFreela.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
 
 namespace DevFreela.API.Controllers
@@ -45,15 +38,6 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateUserCommand command)
         {
-            if (ModelState.IsValid is false)
-            {
-                var messages = ModelState
-                    .SelectMany(ms => ms.Value.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
-                return BadRequest(messages);
-            }
             var id = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetById), new { id }, command);
