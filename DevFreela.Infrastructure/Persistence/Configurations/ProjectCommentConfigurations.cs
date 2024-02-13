@@ -1,6 +1,9 @@
 ﻿using DevFreela.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace DevFreela.Infrastructure.Persistence.Configurations
 {
@@ -8,7 +11,8 @@ namespace DevFreela.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ProjectComment> builder)
         {
-            builder.HasKey(p => p.Id);
+            builder
+                .HasKey(p => p.Id);
 
             builder
                 .HasOne(p => p.Project)

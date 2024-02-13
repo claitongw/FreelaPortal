@@ -1,6 +1,9 @@
 ﻿using DevFreela.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace DevFreela.Infrastructure.Persistence.Configurations
 {
@@ -8,8 +11,9 @@ namespace DevFreela.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
-            builder.HasKey(p => p.Id);
-            //.ToTable() can use it to define the name of the table
+            builder
+                .HasKey(p => p.Id);
+
             builder
                 .HasOne(p => p.Freelancer)
                 .WithMany(f => f.FreelanceProjects)

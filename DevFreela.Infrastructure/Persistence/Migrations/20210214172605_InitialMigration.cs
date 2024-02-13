@@ -1,14 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
 namespace DevFreela.Infrastructure.Persistence.Migrations
 {
-    /// <inheritdoc />
     public partial class InitialMigration : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -76,19 +72,26 @@ namespace DevFreela.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserSkill",
+                name: "UserSkills",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdUser = table.Column<int>(type: "int", nullable: false),
-                    IdSkill = table.Column<int>(type: "int", nullable: false)
+                    IdSkill = table.Column<int>(type: "int", nullable: false),
+                    SkillId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserSkill", x => x.Id);
+                    table.PrimaryKey("PK_UserSkills", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserSkill_Users_IdSkill",
+                        name: "FK_UserSkills_Skills_SkillId",
+                        column: x => x.SkillId,
+                        principalTable: "Skills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserSkills_Users_IdSkill",
                         column: x => x.IdSkill,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -144,25 +147,29 @@ namespace DevFreela.Infrastructure.Persistence.Migrations
                 column: "IdFreelancer");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserSkill_IdSkill",
-                table: "UserSkill",
+                name: "IX_UserSkills_IdSkill",
+                table: "UserSkills",
                 column: "IdSkill");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSkills_SkillId",
+                table: "UserSkills",
+                column: "SkillId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "ProjectComments");
 
             migrationBuilder.DropTable(
-                name: "Skills");
-
-            migrationBuilder.DropTable(
-                name: "UserSkill");
+                name: "UserSkills");
 
             migrationBuilder.DropTable(
                 name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Skills");
 
             migrationBuilder.DropTable(
                 name: "Users");

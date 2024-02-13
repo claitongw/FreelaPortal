@@ -1,10 +1,6 @@
 ﻿using DevFreela.Application.Commands.CreateUser;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace DevFreela.Application.Validators
 {
@@ -12,19 +8,25 @@ namespace DevFreela.Application.Validators
     {
         public CreateUserCommandValidator()
         {
-            RuleFor(p => p.Email).EmailAddress().WithMessage("Email not valid");
-            RuleFor(p => p.Password).Must(ValidPassword).WithMessage("Password Invalid");
-            RuleFor(p => p.FullName).NotEmpty().NotNull().Must(ValidName).WithMessage("Name Invalid");
+            RuleFor(p => p.Email)
+                .EmailAddress()
+                .WithMessage("E-mail não válido!");
+
+            RuleFor(p => p.Password)
+                .Must(ValidPassword)
+                .WithMessage("Senha deve conter pelo menos 8 caracteres, um número, uma letra maiúscula, uma minúscula, e um caractere especial");
+
+            RuleFor(p => p.FullName)
+                .NotEmpty()
+                .NotNull()
+                .WithMessage("Nome é obrigatório!");
         }
 
-        private bool ValidName(string fullName)
+        public bool ValidPassword(string password)
         {
-            return fullName.Split(" ").Length > 1;
-        }
+            var regex = new Regex(@"^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%^&+=]).*$");
 
-        private bool ValidPassword(string password)
-        {
-            return password is not null;
+            return regex.IsMatch(password);
         }
     }
 }

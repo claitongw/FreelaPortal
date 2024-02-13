@@ -4,7 +4,9 @@ using DevFreela.Core.Repositories;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories
@@ -24,17 +26,12 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             return await _dbContext.Projects.ToListAsync();
         }
 
-        public async Task<Project> GetByIdAsync(int id)
+        public async Task<Project> GetDetailsByIdAsync(int id)
         {
-            var project = await _dbContext.Projects
-                            .Include(p => p.Client)
-                            .Include(p => p.Freelancer)
-                            .SingleOrDefaultAsync(p => p.Id == id);
-
-            if (project == null) 
-                return null;
-
-            return project;
+            return await _dbContext.Projects
+                .Include(p => p.Client)
+                .Include(p => p.Freelancer)
+                .SingleOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Project project)
@@ -47,8 +44,10 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
         {
             using (var sqlConnection = new SqlConnection(_connectionString))
             {
-                await sqlConnection.OpenAsync();
+                sqlConnection.Open();
+
                 var script = "UPDATE Projects SET Status = @status, StartedAt = @startedat WHERE Id = @id";
+
                 await sqlConnection.ExecuteAsync(script, new { status = project.Status, startedat = project.StartedAt, project.Id });
             }
         }
@@ -58,9 +57,14 @@ namespace DevFreela.Infrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task CreateCommentAsync(ProjectComment projectComment)
+        public async Task<Project> GetByIdAsync(int id)
         {
-            var commentCreated = await _dbContext.ProjectComments.AddAsync(projectComment);
+            return await _dbContext.Projects.SingleOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task AddCommentAsync(ProjectComment projectComment)
+        {
+            await _dbContext.ProjectComments.AddAsync(projectComment);
             await _dbContext.SaveChangesAsync();
         }
     }

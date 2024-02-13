@@ -9,6 +9,7 @@ namespace DevFreela.Application.Queries.GetUser
         {
             Id = id;
         }
-        public int Id { get; set; }
+
+        public int Id { get; private set; }
     }
 }

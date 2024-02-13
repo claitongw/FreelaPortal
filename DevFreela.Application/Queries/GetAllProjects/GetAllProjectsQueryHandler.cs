@@ -3,9 +3,10 @@ using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,10 +15,11 @@ namespace DevFreela.Application.Queries.GetAllProjects
     public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, List<ProjectViewModel>>
     {
         private readonly IProjectRepository _projectRepository;
-        public GetAllProjectsQueryHandler(IProjectRepository repository)
+        public GetAllProjectsQueryHandler(IProjectRepository projectRepository)
         {
-            _projectRepository = repository;
+            _projectRepository = projectRepository;
         }
+
         public async Task<List<ProjectViewModel>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
         {
             var projects = await _projectRepository.GetAllAsync();

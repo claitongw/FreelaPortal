@@ -1,5 +1,6 @@
 ﻿using DevFreela.Application.Queries.GetAllSkills;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace DevFreela.API.Controllers
     public class SkillsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public SkillsController(Mediator mediator)
+        public SkillsController(IMediator mediator)
         {
             _mediator = mediator;
         }
